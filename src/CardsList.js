@@ -6,7 +6,6 @@ class CardsList extends React.Component {
 
   renderCardList = () => {
     return this.props.cards.map((card, index) => {
-      console.log(card, index);
       return (
         <CardDetails 
           onDelete={this.props.onDelete} 

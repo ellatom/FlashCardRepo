@@ -3,52 +3,55 @@ import React from 'react';
 
 class FormCreateEdit extends React.Component {
 
-    state={id:"",question:"",answer:""}
+    state={question:"",answer:""}
 
     handleChange = (event) => {
         const value = event.target.value;
         const name = event.target.name;
 
-        this.setState((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    }
-    editCard=()=>
-    {
-        // this.props.onEdit(this.props.editKey,this.state.question,this.state.answer);
+        this.props.card[name] = value;
+
+        this.setState({[name]: value});
     }
 
-    addCard = async (event) => {
+    newCard = (event) => {
+        event.preventDefault();
+
+        this.props.card.id = "";
+        this.props.card.question = "";
+        this.props.card.answer = "";
+        
+        this.setState({question: "", answer: ""});
+    }
+
+    saveCard = async (event) => {
+      
         document.querySelector(".msg").innerHTML="";
-
-        if(this.props.editKey!=="")
-            this.editCard();
         event.preventDefault();
         
-        let key=
-          String(Math.floor(Math.random() * 200)+100);
-       
-        if(this.state.question==="" || this.state.answer==="")
+        if(this.props.card.question==="" || this.props.card.answer==="")
+        {
             document.querySelector(".msg").innerHTML="Field shouldnt be empty";
-
-        this.props.addCard(key,this.state.question,this.state.answer);
-        // document.querySelector("textarea").innerHTML="";
+            return;
+        }
+        this.props.saveCard(this.props.card);
+        this.newCard(event);
     }
 
     render() {
-        console.log(`FormCreateEdit.render`);
+        console.log(`FormCreateEdit.render ${this.props.card.id}`);
         return (
             <div>
                 <br/>
-                <div>Add/Edit More Cards</div>
+                {/* <div>Add/Edit More Cards</div> */}
+                <div>{this.props.card.id ? `Editting card with id=${this.props.card.id}` : "Adding a new card"}</div>
                 <form id="myForm" className="form">
                     <label htmlFor="Question">Question:</label>
                     <br/>
                     <textarea 
                         id="question" 
                         name="question" 
-                        value={this.state.question} 
+                        value={this.props.card.question} 
                         onChange={this.handleChange} 
                         rows="3" cols="50" 
                         placeholder="Insert Question here">
@@ -59,13 +62,13 @@ class FormCreateEdit extends React.Component {
                     <textarea 
                         id="answer"  
                         name="answer" 
-                        value={this.state.answer} 
+                        value={this.props.card.answer} 
                         onChange={this.handleChange} 
                         rows="3" cols="50" 
                         placeholder="Insert Answer here">
                     </textarea>
                     <br/>
-                    <button onClick={this.addCard}> Add</button>
+                    <button onClick={this.saveCard}>{this.props.card.id ? "Save" : "Add"}</button>
                     <div className="msg"></div>
                 </form>
             </div>

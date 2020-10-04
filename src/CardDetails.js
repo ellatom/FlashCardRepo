@@ -12,16 +12,14 @@ class CardsDetail extends React.Component {
 
     render()
     {
-        if(this.props.card == null) return "no card";
         return(  
            <div className="cardView">
-               <div className="question" key={this.props.card.id}><i className="far fa-question-circle"></i>Question:{this.props.card.question}</div>
-               <div className="answer"><i className="fas fa-crown"></i>Answer:{this.props.card.answer}</div>
+               <div className="question" key={this.props.card.id}><i className="far fa-question-circle"></i>Question:<br/>{this.props.card.question}</div>
+               <div className="answer"><i className="fas fa-crown"></i>Answer:<br/>{this.props.card.answer}</div>
                <button className="delete" onClick={this.onDelete}>Delete</button>
                <button className="edit" onClick={this.onEdit}>Edit</button>
            </div> 
         )
     }
 }
-
 export default CardsDetail;

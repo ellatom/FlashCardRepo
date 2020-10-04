@@ -1,8 +1,3 @@
-:root{
-  box-sizing: border-box;
-  padding:0px;
-  margin:0px;
-}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -10,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 code {
@@ -33,11 +28,9 @@ img{
   margin:10px;
   display:block;
   word-wrap:break-word;
+  padding: 3px;
 }
-.flipCardBack
-{
-  word-wrap:break-word;
-}
+
 .flipCardInner { /*flipper*/
   position: relative;
   width: 100%;
@@ -47,7 +40,7 @@ img{
   transform-style: preserve-3d;
 }
 .flipCard .flipCardBack {
-  background: #4ad3dd;
+  background: #3498db;
   transform: rotateY(180deg);
  }
 
