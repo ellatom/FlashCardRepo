@@ -5,7 +5,7 @@ import FormCreateEdit from './FormCreateEdit';
 
 class ManageCards extends React.Component {
 
-  state = { cards: [], loading: false,editKey:"" };
+  state = { cards: [], loading: false, currentCard: {} };
 
   componentDidMount() {
     this.setState({ loading: true });
@@ -36,35 +36,48 @@ class ManageCards extends React.Component {
       });
   }
   /////API CRUD:EDIT CARD
-  setEdit = async (event,key) => {
-    this.setState({editKey:key});
+  setEdit = async (event, key) => {
+
+    let card =
+      this.state.cards.find(c => c.id === key);
+
+    this.setState({
+      currentCard: card
+    });
   }
-  updateCard=async(key, question, answer)=>
-  {
-     let card = {
-      "id": key,
-      "question": question,
-      "answer": answer
-    };
-    await api.updateCard(card);
+
+  saveCard = async (card) => {///in case there are no more than 100 cards in each dack. this random wont be bug and easy to know created from gui by user and not mockapi.
+    
+    if (card.id) {
+      await api.updateCard(card);
+    }
+    else {
+      card.id =
+        String(Math.floor(Math.random() * 200) + 100);
+
+      await api.createCard(card);
+    }
 
     await this.getCardsDack();
+    
+    this.setState({
+      loading: false
+    });
+
+  }
+  updateCard = async (card) => {
+    await api.updateCard(card);
   }
   ////API CRUD:CREATE NEW CARD
-  onAdd = async (key, question, answer) => {
-    
+  onAdd = async (card) => {
+
+    card.id =
+      String(Math.floor(Math.random() * 200) + 100);
+
     this.setState({ loading: true },
       async () => {
-        
-        let card = {
-          "id": key,
-          "question": question,
-          "answer": answer
-        }
-
         await api.createCard(card);
-        
-        await this.getCardsDack();
+
         this.setState({
           loading: false
         });
@@ -72,17 +85,17 @@ class ManageCards extends React.Component {
   }
 
   render() {
+    console.log(`ManageCards.render ${this.state.currentCard.id}`);
     return (
       <div>
-        <CardsList 
-          cards={this.state.cards} 
-          onDelete={this.setDelete} 
+        <CardsList
+          cards={this.state.cards}
+          onDelete={this.setDelete}
           onEdit={this.setEdit}>
         </CardsList>
-        <FormCreateEdit 
-          cards={this.state.cards} 
-          addCard={this.onAdd}
-          onEdit={this.updateCard}>
+        <FormCreateEdit
+          card={this.state.currentCard}
+          saveCard={this.saveCard}>
         </FormCreateEdit>
       </div>
     )
